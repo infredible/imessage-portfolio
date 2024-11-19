@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatInput.css';
 
-const ChatInput = () => {
+const ChatInput = ({ onSendMessage }) => {
+  console.log('ChatInput component rendering');
   const [message, setMessage] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const popoverRef = useRef(null);
@@ -33,8 +34,16 @@ const ChatInput = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (message.trim()) {
-      console.log('Message sent:', message);
+      console.log('Submitting message:', message.trim());
+      onSendMessage(message.trim());
       setMessage('');
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
     }
   };
 
@@ -83,6 +92,7 @@ const ChatInput = () => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
           placeholder="iMessage"
           className="message-input"
         />

@@ -1,8 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './IMessageChat.css';
 import './ChatInput.css';
-import { messages } from '../data/messages';
 import ChatInput from './ChatInput';
+
+// Initial messages data
+const initialMessages = [
+    {
+      id: 1,
+      type: 'received',
+      content: 'Hey there! 👋 Want to know more about me?'
+    },
+    {
+      id: 2,
+      type: 'sent',
+      content: 'Sure! Tell me about yourself'
+    },
+    {
+      id: 3,
+      type: 'received',
+      content: "I'm a UI designer with 5 years of experience specializing in user-centered design and interface development."
+    }
+];
+
+// Separate MessageGroup component
+const MessageGroup = ({ message }) => {
+    console.log('Rendering message:', message);
+    return (
+      <div className="message-group">
+        <div className={`message ${message.type}`}>
+          {message.content}
+        </div>
+      </div>
+    );
+};
 
 const Notch = () => <div className="notch"></div>;
 
@@ -48,50 +78,41 @@ const ChatHeader = () => {
   );
 };
 
-const MessageGroup = ({ message }) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsVisible(true);
-    }, message.id * 1000);
-
-    return () => clearTimeout(timeout);
-  }, [message.id]);
-
-  return (
-    <div className={`message-group ${isVisible ? 'visible' : ''}`}>
-      <div className={`message ${message.type}`}>
-        {message.image && (
-          <img src={message.image} alt="Project" className="image-message" />
-        )}
-        {message.content && <p>{message.content}</p>}
-      </div>
-    </div>
-  );
-};
-
-const ChatContainer = () => {
-  return (
-    <div className="chat-container">
-      {messages.map((message) => (
-        <MessageGroup key={message.id} message={message} />
-      ))}
-    </div>
-  );
-};
-
 const IMessageChat = () => {
-  return (
-    <div className="iphone-container">
-      <div className="iphone-frame">
-        <Notch />
-        <ChatHeader />
-        <ChatContainer />
-        <ChatInput />
+    const [messages, setMessages] = useState(initialMessages);
+    const chatContainerRef = useRef(null);
+    
+    useEffect(() => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    }, []);
+  
+    const handleSendMessage = (messageText) => {
+      const newMessage = {
+        id: messages.length + 1,
+        type: 'sent',
+        content: messageText,
+        timestamp: new Date().toISOString()
+      };
+      
+      setMessages([...messages, newMessage]);
+    };
+  
+    return (
+      <div className="iphone-container">
+        <div className="iphone-frame">
+          <Notch />
+          <ChatHeader />
+          <div className="chat-container" ref={chatContainerRef}>
+            {messages.map((message) => (
+              <MessageGroup key={message.id} message={message} />
+            ))}
+          </div>
+          <ChatInput onSendMessage={handleSendMessage} />
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
-export default IMessageChat; 
+export default IMessageChat;
