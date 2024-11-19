@@ -1,0 +1,323 @@
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "SF Pro Display", system-ui, sans-serif;
+}
+
+/* Updated iPhone container for newer dimensions */
+.iphone-container {
+  width: 393px; /* iPhone 14 Pro width */
+  height: 852px; /* iPhone 14 Pro height */
+  position: relative;
+  margin: 40px auto;
+}
+
+.iphone-frame {
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-radius: 55px; /* More rounded corners for newer iPhones */
+  overflow: hidden;
+  position: relative;
+  box-shadow: 
+    0 0 0 11px #1f1f1f,
+    0 0 0 13px #191919,
+    0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Dynamic Island styling */
+.notch {
+  width: 126px; /* Dynamic Island width */
+  height: 37px; /* Dynamic Island height */
+  background: #1f1f1f;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 20px;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+/* Optional: Dynamic Island hover effect */
+.notch:hover {
+  width: 160px;
+  height: 42px;
+}
+
+/* Status bar adjustments for Dynamic Island */
+.status-bar {
+  height: 60px; /* Increased height for Dynamic Island */
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Align items to bottom */
+  background: #f6f6f6;
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
+.time {
+  margin-left: 5px;
+}
+
+.icons {
+  display: flex;
+  gap: 5px;
+}
+
+/* Chat header */
+.chat-header {
+  background: #f6f6f6;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 10px;
+}
+
+.contact-info {
+  text-align: center;
+  padding: 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contact-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Chat container */
+.chat-container {
+  padding: 20px;
+  height: calc(100% - 230px); /* Adjusted to make room for input */
+  overflow-y: auto;
+  background-color: #ffffff;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.02) 100%);
+}
+
+/* Add positioning for the input container */
+.chat-input-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 20px 30px;
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  z-index: 10;
+}
+
+/* Message styling */
+.message-group {
+  margin-bottom: 15px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.message-group.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.message {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  position: relative;
+  margin: 2px 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Received message styling */
+.message.received {
+  background: #e9e9eb;
+  color: #000;
+  float: left;
+  border-bottom-left-radius: 5px;
+  margin-right: auto;
+}
+
+.message.received:first-child::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at top left, transparent 60%, #e9e9eb 62%);
+}
+
+/* Sent message styling */
+.message.sent {
+  background: #007aff;
+  color: white;
+  float: right;
+  border-bottom-right-radius: 5px;
+  margin-left: auto;
+}
+
+.message.sent:first-child::before {
+  content: '';
+  position: absolute;
+  right: -8px;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at top right, transparent 60%, #007aff 62%);
+}
+
+/* Image message styling */
+.image-message {
+  max-width: 200px;
+  border-radius: 15px;
+  margin: 5px 0;
+  display: block;
+}
+
+/* Clear floats */
+.message-group::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Scrollbar styling */
+.chat-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+/* Message timestamp */
+.message::after {
+  content: attr(data-time);
+  position: absolute;
+  bottom: -20px;
+  font-size: 12px;
+  color: #8e8e93;
+}
+
+.message.sent::after {
+  right: 15px;
+}
+
+.message.received::after {
+  left: 15px;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 12px;
+  background: #e9e9eb;
+  border-radius: 20px;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: #8e8e93;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 393px) {
+  .iphone-container {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .iphone-frame {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .notch {
+    width: 126px;
+    top: 0;
+  }
+}
+
+/* Optional: Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .chat-container {
+    background-color: #000000;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.02) 100%);
+  }
+
+  .message.received {
+    background: #1c1c1e;
+    color: #fff;
+  }
+
+  .message.received:first-child::before {
+    background: radial-gradient(circle at top left, transparent 60%, #1c1c1e 62%);
+  }
+
+  .chat-header {
+    background: #1c1c1e;
+    border-bottom-color: #38383A;
+  }
+
+  .status-bar {
+    background: #1c1c1e;
+    color: #fff;
+  }
+
+  .contact-name {
+    color: #fff;
+  }
+} 
